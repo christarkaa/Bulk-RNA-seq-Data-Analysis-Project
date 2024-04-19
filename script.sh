@@ -16,3 +16,9 @@ fastqc SRR28420795_1.fastq SRR28420795_2.fastq -o QC_Reports
 multiqc .
 
 # Trimming using Trimmomatic
+java -jar ~/bin/trimmomatic/trimmomatic-0.39/trimmomatic-0.39.jar \
+  PE -phred33 \
+   SRR28420795_1.fastq SRR28420795_2.fastq \
+  paired1.fastq unpaired1.fastq \
+  paired2.fastq unpaired2.fastq \
+  TRAILING:20 MINLEN:50
