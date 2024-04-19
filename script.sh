@@ -22,3 +22,7 @@ java -jar ~/bin/trimmomatic/trimmomatic-0.39/trimmomatic-0.39.jar \
   paired1.fastq unpaired1.fastq \
   paired2.fastq unpaired2.fastq \
   TRAILING:20 MINLEN:50
+
+Alignment with hisat2
+hisat2 -x genome -1 paired1.fastq -2 paired2.fastq -S output.sam
+
