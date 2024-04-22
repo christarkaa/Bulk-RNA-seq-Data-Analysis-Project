@@ -20,4 +20,8 @@ sampleTable <- data.frame(SampleName = sampleNames, fileName = sampleFiles, cond
 
 treatments <- c("Treated", "Control")
 
-ddsfeatureCounts <- 
+ddsFeatureCounts <- DESeqDataSetFromFeatureCounts(sampleTable = sampleTable,
+                                                 directory = directory,
+                                                 design = ~ condition)
+
+colData(ddsFeatureCounts)$condition <- factor(colData(ddsFeatureCounts
