@@ -6,7 +6,7 @@ mkdir bulk && cd '$_"
 # Download datasets
 fastq-dump --split-files SRR28420795
 
-# Make a new directory for quality control
+# Make new directories for quality control and Mapping
 mkdir QC_Reports
 
 # Quality control using FastQC
