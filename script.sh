@@ -23,6 +23,13 @@ java -jar ~/bin/trimmomatic/trimmomatic-0.39/trimmomatic-0.39.jar \
   paired2.fastq unpaired2.fastq \
   TRAILING:20 MINLEN:50
 
-Alignment with hisat2
+# Alignment with hisat2
 hisat2 -x genome -1 paired1.fastq -2 paired2.fastq -S output.sam
+
+# Convert to a bam file
+
+# Sort the bam file
+
+# Quatification of counts using featureCount 
+featureCounts -T 8 -t exon -a annotations.gtf -o counts.txt output_sorted.bam
 
