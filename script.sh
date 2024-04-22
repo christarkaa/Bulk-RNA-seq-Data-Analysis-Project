@@ -31,8 +31,8 @@ hisat2 -x genome -1 paired1.fastq -2 paired2.fastq -S Mapping/SRR28420795.sam
 samtools view -@ 20 -S -b Mapping/SRR28420795.sam > Mapping/SRR28420795.bam
 
 # Sort the bam file
-samtools sort -@ 32 -o Mapping/ERR5743893.sorted.bam Mapping/ERR5743893.bam
+samtools sort -@ 32 -o Mapping/SRR28420795.sorted.bam Mapping/SRR28420795.bam
 
 # Quatification of counts using featureCount 
-featureCounts -T 8 -t exon -a annotations.gtf -o counts.txt output_sorted.bam
+featureCounts -T 8 -t exon -a annotations.gtf -o counts.txt SRR28420795_sorted.bam
 
