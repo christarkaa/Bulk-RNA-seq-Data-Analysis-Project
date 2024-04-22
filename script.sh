@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Make a new directory for this project and change to the directory
-mkdir bulk && cd $_
+mkdir bulk && cd "$_"
 
 # Download datasets
 fastq-dump --split-files SRR28420795
