@@ -24,4 +24,57 @@ ddsFeatureCounts <- DESeqDataSetFromFeatureCounts(sampleTable = sampleTable,
                                                  directory = directory,
                                                  design = ~ condition)
 
-colData(ddsFeatureCounts)$condition <- factor(colData(ddsFeatureCounts
+colData(ddsFeatureCounts)$condition <- factor(colData(ddsFeatureCounts)$condition,
+                                              levels = treatments)
+
+# Carryout differential gene expression
+dds <- DESeq(ddsFeatureCounts)
+res <- results(dds)
+
+# order results bypadj value (most significant to least)
+res = subset(res, padj<0.05)
+res <- res[order(res$padj),]
+# should see DataFrame of baseMean, log2Foldchange, stat, pval, padj
+
+# save data results and normalised reads to csv
+resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized = TRUE)), by = 'row.names', sort = FALSE)
+names(resdata)[1] <- 'gene'
+write.csv(resdata, file = paste0(outputPrefix, "-results-with-normalized.csv"))
+
+# send normalised counts to tab delimited file for GSEA, etc.
+write.table(as.data.frame(counts(dds), normalized = T), file = paste0(outputPrefix, "_normalized_counts.txt"), sep = '\t')
+
+# produce DataFrame of results of statistical tests
+mcols(res, use.names = T)
+write.csv(as.data.frame(mcols(res, use.name = T)), file = paste0(outputPrefix, "-test-conditions.csv"))
+
+# replacing outlier value with estimated value as predicted by distribution using 
+# "trimmed mean" approach. recommended if you have several replicates per treatment 
+# DESeq2 will automatically do this if you havbe 5 or more replicates.
+ddsClean <- replaceOutliersWithTrimmedMean(dds)
+ddsClean <- DESeq(ddsClean)
+tab <- table(initial = results(dds)$padj <0.05,
+             cleaned = results(ddsClean)$padj < 0.05)
+addmargins(tab)
+write.csv(as.data.frame(tab), file = paste0(outputPrefix, "-replaceoutliers.csv"))
+resClean <- results(ddsClean)
+resClean = sebset(res, padj<0.05)
+resClean <- resClean[order(resClean$padj), ]
+write.csv(as.data.frame(resClean), file = paste0(outputPrefix, "-replaceoutliers-results.csv"))
+
+####################################################################################
+# Exploratory data analysis of RNAseq data with DESeq2
+
+# The next steps are for a variety of visualization, QC and other plots to get a
+# sense of what the RNASeq data looks like based on DESeq2 analysis
+
+# 1. MA plot
+# 2. rlog stabilization and variance stabilization
+# 3. variance stabilization plot
+# 4. heatmap of clustering analysis
+# 5. PCA plot
+
+# MA plot of RNAseq data for entire dataset
+# genes with padj <0.1 are colored Red
+
+
