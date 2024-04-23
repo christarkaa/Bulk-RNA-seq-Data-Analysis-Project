@@ -6,9 +6,10 @@ mkdir bulk && cd "$_"
 # Download datasets
 fastq-dump --split-files SRR28420795
 
-# Make new directories for quality control and Mapping
+# Make new directories for quality control, Mapping and Quantification
 mkdir QC_Reports
 mkdir Mapping
+mkdir Counts
 
 # Quality control using FastQC
 fastqc SRR28420795_1.fastq SRR28420795_2.fastq -o QC_Reports
@@ -31,5 +32,5 @@ samtools view -@ 20 -S -b Mapping/SRR28420795.sam > Mapping/SRR28420795.bam
 samtools sort -@ 32 -o Mapping/SRR28420795.sorted.bam Mapping/SRR28420795.bam
 
 # Quantification of counts using featureCounts
-featureCounts -T 8 -t exon -g gene_id -a annotations.gtf -o counts.SRR28420795.txt Mapping/SRR28420795.sorted.bam
+featureCounts -T 8 -t exon -g gene_id -a annotations.gtf -o Counts/counts.SRR28420795.txt Mapping/SRR28420795.sorted.bam
 
