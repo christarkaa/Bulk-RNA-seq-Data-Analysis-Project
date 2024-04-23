@@ -22,7 +22,7 @@ sickle pe -f SRR28420795_1.fastq -r  SRR28420795_2.fastq -t sanger \
   -s single.SRR28420795.fastq -q 20 -l 50
 
 # Alignment with HISAT2
-hisat2 -p 8 -x genome -1 paired1.fastq -2 paired2.fastq -S Mapping/SRR28420795.sam
+hisat2 -p 8 -x genome -1 trimmed.SRR28420795_1.fastq -2 trimmed.SRR28420795_2.fastq -S Mapping/SRR28420795.sam
 
 # Convert to a BAM file
 samtools view -@ 20 -S -b Mapping/SRR28420795.sam > Mapping/SRR28420795.bam
