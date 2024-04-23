@@ -25,7 +25,7 @@ java -jar ~/bin/trimmomatic/trimmomatic-0.39/trimmomatic-0.39.jar \
   TRAILING:20 MINLEN:50
 
 # Alignment with HISAT2
-hisat2 -x genome -1 paired1.fastq -2 paired2.fastq -S Mapping/SRR28420795.sam
+hisat2 -p 8 -x genome -1 paired1.fastq -2 paired2.fastq -S Mapping/SRR28420795.sam
 
 # Convert to a BAM file
 samtools view -@ 20 -S -b Mapping/SRR28420795.sam > Mapping/SRR28420795.bam
