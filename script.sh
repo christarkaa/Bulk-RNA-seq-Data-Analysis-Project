@@ -16,13 +16,10 @@ fastqc SRR28420795_1.fastq SRR28420795_2.fastq -o QC_Reports
 # Summarizing the QC results
 multiqc .
 
-# Trimming using Trimmomatic
-java -jar ~/bin/trimmomatic/trimmomatic-0.39/trimmomatic-0.39.jar \
-  PE -phred33 \
-  SRR28420795_1.fastq SRR28420795_2.fastq \
-  paired1.fastq unpaired1.fastq \
-  paired2.fastq unpaired2.fastq \
-  TRAILING:20 MINLEN:50
+# Trimming using Sickle
+sickle pe -f SRR28420795_1.fastq -r  SRR28420795_2.fastq -t sanger \
+  -o trimmed.SRR28420795_1.fastq -p trimmed.SRR28420795_2.fastq \
+  -s unpaired_SRR28420795.fastq -q 20 -l 50
 
 # Alignment with HISAT2
 hisat2 -p 8 -x genome -1 paired1.fastq -2 paired2.fastq -S Mapping/SRR28420795.sam
