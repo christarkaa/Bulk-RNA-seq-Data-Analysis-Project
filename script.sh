@@ -32,5 +32,6 @@ samtools view -@ 20 -S -b Mapping/SRR28420795.sam > Mapping/SRR28420795.bam
 samtools sort -@ 32 -o Mapping/SRR28420795.sorted.bam Mapping/SRR28420795.bam
 
 # Quantification of counts using featureCounts
-featureCounts -T 8 -t exon -g gene_id -a annotations.gtf -o Counts/counts.SRR28420795.txt Mapping/SRR28420795.sorted.bam
+featureCounts -T 8 -p --countReadPairs -B -t exon -g gene_id -a annotations.gtf \ 
+-o Counts/counts.SRR28420795.txt Mapping/SRR28420795.sorted.bam
 
