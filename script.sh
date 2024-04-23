@@ -17,7 +17,7 @@ fastqc SRR28420795_1.fastq SRR28420795_2.fastq -o QC_Reports
 multiqc .
 
 # Trimming using Sickle
-sickle pe -f SRR28420795_1.fastq -r  SRR28420795_2.fastq -t illumina \
+sickle pe -f SRR28420795_1.fastq -r  SRR28420795_2.fastq -t sanger \
   -o trimmed.SRR28420795_1.fastq -p trimmed.SRR28420795_2.fastq \
   -s unpaired_SRR28420795.fastq -q 20 -l 50
 
