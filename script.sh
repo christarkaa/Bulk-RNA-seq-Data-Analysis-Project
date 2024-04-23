@@ -14,7 +14,7 @@ mkdir Mapping
 fastqc SRR28420795_1.fastq SRR28420795_2.fastq -o QC_Reports
 
 # Summarizing the QC results
-multiqc .
+multiqc QC_Reports
 
 # Trimming using Sickle
 sickle pe -f SRR28420795_1.fastq -r  SRR28420795_2.fastq -t sanger \
