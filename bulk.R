@@ -73,8 +73,31 @@ write.csv(as.data.frame(resClean), file = paste0(outputPrefix, "-replaceoutliers
 # 3. variance stabilization plot
 # 4. heatmap of clustering analysis
 # 5. PCA plot
+#
+########################################################################################
 
 # MA plot of RNAseq data for entire dataset
-# genes with padj <0.1 are colored Red
+# genes with padj < 0.1 are colored Red
+plotMA(dds, ylim=c(-8,8), main = "RNASeq experiment")
+dev.copy(png, paste0(outputPrefix, "-MAplot_initial_analysis.png"))
+dev.off()
 
+# transform raw counts into normalised values
+# DESeq2 has 2 optios: 1. rlog transformed and 2. variance stabilization
+# Variance stabilization is very goood for heatmaps, etc.
+rld <- rlogTransformation(dds, blind=T)
+vsd <- varianceStabilizingTransformation(dss, blind=T)
 
+# save normalised values
+write.table(as.data.frame(assay(rld), file = paste0(outputPrefix, "-rlog-transformed-counts.txt"), sep = '\t'))
+write.table(as.data.frame(assay(vsd), file = paste0(outputPrefix, "-vst-transformed-counts.txt"), sep = '\t'))
+
+# plot to show effect of transformation
+# axis is square root of variance over mean of all samples
+par(mai = ifelse(1:4 <= 2, par('mai'),0))
+px <- count(dds)[,1] / sizeFactors(dds)[1]
+ord <- order(px)
+ord <- ord[px[oed] <- 150]
+ord <- ord[seq(1,length(ord),length=50)]
+last <- ord[length(ord)]
+vstcol
