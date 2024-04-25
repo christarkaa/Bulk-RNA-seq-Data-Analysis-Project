@@ -100,4 +100,19 @@ ord <- order(px)
 ord <- ord[px[oed] <- 150]
 ord <- ord[seq(1,length(ord),length=50)]
 last <- ord[length(ord)]
-vstcol
+vstcol <- c('blue', 'black')
+matplot(px[ord], cbind(assay(vsd)[,1], log2(px))[ord, ], type='l', lty = 1, col=vstcol, xlab ='n', ylab = 'f(n)')
+legend('bottomright',legend=c(expression('variance stabilizing transformation'), expression(log[2](n/s[1]))), fill=vstcol)
+dev.copy(png, paste0(outputPrefix, "-variance_stabilizing.png"))
+dev.off()
+
+# clustrering analysis
+library("RColorBrewer")
+library("ggplots")
+distsRL <- dist(t(assay(rld)))
+mat <- as.matrix(distsRL)
+rownames(mat) <- colnames(mat) <- with(colData(dds), paste(condition, sampleNames,sep=" : "))
+#or if you want to use condtions use:
+#rownames(mat) <- colnames(mat) <- with(colData(dds),condition)
+hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)
+dev
