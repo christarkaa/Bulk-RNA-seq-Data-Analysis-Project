@@ -115,4 +115,66 @@ rownames(mat) <- colnames(mat) <- with(colData(dds), paste(condition, sampleName
 #or if you want to use condtions use:
 #rownames(mat) <- colnames(mat) <- with(colData(dds),condition)
 hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)
-dev
+dev.copy(png, paste0(outputPrefix, "-clustering.png"))
+heatmap.2(mat, trace = "none", col = rev(hmcol), margin = c(13,13))
+
+#Principal components plot shows additional but rough clustering of samples
+library("genefilter")
+library("ggplot2")
+library("grDevices")
+
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing=T)[seq_len(min(500,length(rv)))]
+pc <- prcomp(t(assay(vsd)[select,]))
+
+# set condition
+condition <- treatments
+scores <- data.frame(pc$x, condition)
+pcaplot <- ggplot(scores, aes(x = PC1, y = PC2, col = (factor(condition))) +
+                  geom_point(size = 5) +
+                  ggtitle("Principal Components") +
+                  scale_colour_brewer(name = " ", palette = "Set1") +
+                  theme(
+                    Plot.title = element_text(face = 'bold'),
+                    legend.position = c(.9,.2),
+                    legend.key = element_rect(fill = 'NA'),
+                    legend.text = element_text(size = 10, face = "bold"),
+                    axis.text.y = element_text(colour = "Black"),
+                    axis.text.x = element_text(colour = "Black"),
+                    axis.title.x = element_text(face = "bold"),
+                    axis.title.y = element_text(face = 'bold'),
+                    panel.grid.major.x = element_blank(),
+                    panel.grid.major.y = element_blank(),
+                    panel.grid.minor.x = element_blank(),
+                    panel.grid.minor.y = element_blank(),
+                    panel.background = element_rect(color = 'black',fill = NA)
+                    ))
+ggsave(pcaplot, file = paste0(outputPrefix, "-ggplot2.pdf"))
+
+
+# scatter plot of rlog transformations between sample conditions
+# nice way to compare control and experimental samples
+head(assay(rld))
+# plot(log2(1+counts(dds,normalized=T)[,1:2]),col='black',pch=20,cex=0.3, main='Log2 transformed')
+plot(assay(rld)[,1:3],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
+plot(assay(rld)[,2:4],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
+
+# heatmap of data
+library("RcolorBrewer")
+library("gplots")
+# 1000 top expressed genes with heatmap.2
+select <- order(rowMeans(counts(ddsClean, normalized=T)), decreasing=T)[1:1000]
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n=1000)
+heatmap.2(assay(vsd)[select,], col=my_palette,
+          scale="row", key=T, keysize=1, symkey=T,
+          density.info="none", trace="none",
+          cexCol=0.6, labRow=F,
+          main="1000 Top Expressed Genes Heatmap")
+dev.copy(png, paste0(outputPrefix, "-HEATMAP.png"))
+dev.off()
+
+##################################################################################
+#Functional enrichment analysis
+#
+
+              
