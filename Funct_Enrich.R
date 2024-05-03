@@ -85,7 +85,6 @@ kegg_enrich <- enrichKEGG(
   pvalueCutoff = 0.05,    # P-value cutoff for significance
   qvalueCutoff = 0.05,     # Adjusted p-value (FDR) cutoff for significance
 )
-
 View(kegg_enrich)
 
 # Visualize the KEGG pathway enrichment results
