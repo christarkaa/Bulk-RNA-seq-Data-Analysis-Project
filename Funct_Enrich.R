@@ -34,16 +34,13 @@ hsapiens_attributes =
 hsapiens_attributes
 View(hsapiens_attributes)
 
-
-gene_set <- resdata$Gene
-
 # Retrieve filters
 filters <- biomartr::getFilters(mart    = "ENSEMBL_MART_ENSEMBL", 
                           dataset = "hsapiens_gene_ensembl")
 View(filters)
 
-
 # Query Biomart
+gene_set <- resdata$Gene
 result_BM <- biomartr::biomart(
   genes = gene_set,
   mart = "ENSEMBL_MART_ENSEMBL",
@@ -51,7 +48,6 @@ result_BM <- biomartr::biomart(
   attributes = c("hgnc_symbol", "entrezgene_id"),
   filters = "ensembl_gene_id"
 )
-
 head(result_BM)
 
 # Convert result_BM to a data frame
@@ -60,8 +56,8 @@ result_df <- as.data.frame(result_BM)
 # Rename the columns for easier access
 colnames(result_df) <- c("Gene", "HGNC_symbol", "Entrez_gene_id")
 
-geneID <- result_df$Entrez_gene_id
 # Perform functional enrichment analysis for GO terms
+geneID <- result_df$Entrez_gene_id
 ego <- enrichGO(
   gene = geneID,
   OrgDb = org.Hs.eg.db,  # Human genome annotation database
