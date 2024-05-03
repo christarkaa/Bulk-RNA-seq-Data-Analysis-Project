@@ -4,10 +4,10 @@ setwd("/Users/christophertarkaa/Desktop/bulk")
 
 # Install packages if not already installed
 BiocManager::install("biomaRt")
-aBiocManager::install("clusterProfiler", force = T)
-BiocManager::install("enrichplot", force = T)
-BiocManager::install("biomartr", force = T)
-BiocManager::install("org.Hs.eg.db", force = T)
+aBiocManager::install("clusterProfiler")
+BiocManager::install("enrichplot")
+BiocManager::install("biomartr")
+BiocManager::install("org.Hs.eg.db")
 BiocManager::install("DOSE")
 
 # Load packages
